@@ -18,4 +18,36 @@ import matplotlib.pyplot as plt
 drive.mount('/content/drive')
 
 # Path ke file Database.txt di Google Drive
-file_path = '/content/drive/My Drive/modul11' # Ganti dengan path sesuai lokasi file di google drive
+file_path = '/content/drive/My Drive/modul11/soal1.txt' # Ganti dengan path sesuai lokasi file di google drive
+
+# Membaca data dari file
+Database = pd.read_csv(file_path, sep=',', header=0)
+
+# x = Data, y = Target
+X = Database[['a', 'b']] # Pastika kolom sesuai dengna nama yang ada di file
+y = Database['Target']
+
+# Membuat dan melatih model svm
+clf = svm.SVC()
+clf.fit(X.values, y)
+
+# Melakukan Prediksi
+y_pred = clf.predict(X.values)
+
+# Menampilkan hasil prediksi
+print("Hasil Prediksi:")
+for i, pred in enumerate(y_pred):
+    print(f"{X.iloc[i, 0]} , {X.iloc[i, 1]} , {pred}")
+
+# Membuat plot perbandingan nilai asli dengna nilai prediksi
+plt.figure(figsize=(10, 6))
+plt.plot(range(len(y)), y, 'o-', label='Nilai Asli (Target)', color='blue')
+plt.plot(range(len(y_pred)), y_pred, 'x--', label='Nilai Prediksi (SVM)', color='yellow')
+
+# Membuat label dan judul
+plt.xlabel('Indeks Data')
+plt.ylabel('Nilai')
+plt.title('Perbandingan Nilai Asli dengan Nilai Prediksi (SVM)')
+plt.legend()
+plt.grid()
+plt.show()
